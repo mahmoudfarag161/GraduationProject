@@ -122,6 +122,14 @@ const SummaryApi = {
     url2: "/pay",
     method: "PUT",
   },
+  changePassword: {
+    url: "https://reca.azurewebsites.net/api/v1/users/changeMyPassword/",
+    method: "PUT",
+  },
+  changeAccountDetails: {
+    url: "https://reca.azurewebsites.net/api/v1/users/updateMe",
+    method: "PUT",
+  },
 };
 
 export default SummaryApi;

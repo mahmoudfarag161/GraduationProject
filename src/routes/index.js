@@ -16,6 +16,11 @@ import Payment from "../pages/Payment";
 import AllCategories from "../pages/AllCategories";
 import AllSubCategories from "../pages/AllSubCategories";
 import AllOrders from "../pages/AllOrders";
+import Profile from "../pages/Profile";
+import UserOrders from "../pages/UserOrders";
+import ChangePassword from "../pages/ChangePassword"
+import ChangeAccountDetails from "../pages/ChangeAccountDetails";
+
 
 const router = createBrowserRouter([
   {
@@ -61,6 +66,22 @@ const router = createBrowserRouter([
       {
         path: "search",
         element: <SearchProduct />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
+        path: "profile/orders",
+        element: <UserOrders />,
+      },
+      {
+        path: "profile/change-password",
+        element: <ChangePassword />,
+      },
+      {
+        path: "profile/update",
+        element: <ChangeAccountDetails />,
       },
       {
         path: "admin-panel",

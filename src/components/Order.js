@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import ROLE from '../common/role';
 
 
 const Order = ({ order, token }) => {
   const [isDelivered, setIsDelivered] = useState(order.isDelivered);
   const [isPaid, setIsPaid] = useState(order.isPaid);
+  const user = useSelector((state) => state?.user?.user);
 
   const handleIsDeliveredClick = async (orderId) => {
     const fetchData = await fetch(SummaryApi.setIsDelivered.url + `${orderId}` + SummaryApi.setIsDelivered.url2, {
@@ -49,14 +52,17 @@ const Order = ({ order, token }) => {
 
   return (
     <tr>
-                <td>{order._id}</td>
-                <td className="flex items-center justify-start gap-2">
+                {user?.role === ROLE.ADMIN && (
+                  <td>{order._id}</td>
+                )}
+                
+                <td className="flex items-center justify-center gap-2">
                   {order?.cartItems?.map((cartItem, index) => {
                     const product = cartItem.product;
                     return product ? (
                       <img
                         key={index}
-                        className="w-10 h-10 rounded-full"
+                        className="w-11 h-11 rounded-full"
                         src={product.imageCover}
                         alt="cart item"
                       />
@@ -66,8 +72,19 @@ const Order = ({ order, token }) => {
                 <td>{order?.totalOrderPrice}</td>
                 <td>{order?.shippingAddress?.details}</td>
                 <td>{order?.shippingAddress?.phone}</td>
-                <td className="cursor-pointer" onClick={() => handleIsDeliveredClick(order?._id)}>{isDelivered ? "Yes" : "No"}</td>
-                <td className="cursor-pointer" onClick={() => handleIsPaidClick(order?._id)}>{isPaid ? "Yes" : "No"}</td>
+                { user?.role === ROLE.ADMIN && (
+                  <>
+                    <td className="cursor-pointer" onClick={() => handleIsDeliveredClick(order?._id)}>{isDelivered ? "Yes" : "No"}</td>
+                    <td className="cursor-pointer" onClick={() => handleIsPaidClick(order?._id)}>{isPaid ? "Yes" : "No"}</td>
+                  </>
+                  )
+                }
+                { user?.role === ROLE.GENERAL && (
+                  <>
+                    <td>{ String(order?.createdAt).substring(0, 10)}</td>
+                  </>
+                  )
+                }
     </tr>
   )
 }
