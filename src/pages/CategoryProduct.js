@@ -25,16 +25,8 @@ const CategoryProduct = () => {
   }, []);
 
   return (
-    <div className="container mx-auto p-4">
-      {/***desktop version */}
-      <div className="hidden lg:grid">
-        {/***right side ( product ) */}
-        <div className="px-4">
-          <div className="min-h-[calc(100vh-120px)] overflow-y-scroll max-h-[calc(100vh-120px)]">
-            <SubCategoryCard data={data} loading={loading} />
-          </div>
-        </div>
-      </div>
+    <div className=" p-5 ">
+      <SubCategoryCard data={data} loading={loading} />
     </div>
   );
 };

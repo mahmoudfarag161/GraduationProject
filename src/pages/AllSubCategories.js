@@ -32,7 +32,7 @@ function AllSubCategories() {
         </button>
       </div>
 
-      <div className="flex items-center flex-wrap gap-5 py-4 h-[calc(100vh-190px)] overflow-y-scroll">
+      <div className="flex items-center justify-around flex-wrap gap-5 py-4 h-[calc(100vh-190px)] overflow-y-scroll">
         {allSubCategory.map((product, index) => {
           return (
             <AdminSubCategoryCard

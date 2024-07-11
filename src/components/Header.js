@@ -9,8 +9,14 @@ import { toast } from "react-toastify";
 import { setUserDetails } from "../store/userSlice";
 import ROLE from "../common/role";
 import Context from "../context";
+// import i18n from "i18next";
+
+// import cookies from "js-cookie";
+// import { useTranslation } from "react-i18next";
 
 const Header = () => {
+  // const lng = cookies.get("i18next") || "en";
+
   const user = useSelector((state) => state?.user?.user);
   const dispatch = useDispatch();
   const [menuDisplay, setMenuDisplay] = useState(false);
@@ -21,9 +27,8 @@ const Header = () => {
   const searchQuery = URLSearch.getAll("keyword");
   const [search, setSearch] = useState(searchQuery);
 
-  // };
   function handleLogout() {
-    localStorage.removeItem("");
+    localStorage.removeItem("token");
     context.setToken("");
     toast.success("logout successfully");
     dispatch(setUserDetails(null));
@@ -40,6 +45,12 @@ const Header = () => {
       navigate("/search");
     }
   };
+  // function handleEnglish() {
+  //   i18n.changeLanguage("en");
+  // }
+  // function handleArabic() {
+  //   i18n.changeLanguage("ar");
+  // }
   return (
     <header className="h-16 shadow-md bg-white fixed w-full z-40">
       <div className=" h-full container mx-auto flex items-center px-4 justify-between">
@@ -93,15 +104,13 @@ const Header = () => {
                       Admin Panel
                     </Link>
                   )}
-                  
-                    <Link
-                      to={"/profile"}
-                      className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
-                      onClick={() => setMenuDisplay((preve) => !preve)}
-                    >
-                      My Profile
-                    </Link>
-                  
+                  <Link
+                    to={"/profile"}
+                    className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay((preve) => !preve)}
+                  >
+                    My Profile
+                  </Link>
                 </nav>
               </div>
             )}
@@ -136,6 +145,21 @@ const Header = () => {
               </Link>
             )}
           </div>
+          {/* <div>
+            <button
+              onClick={handleEnglish}
+              className="px-3 mx-2 py-1 rounded-full text-white bg-red-600 hover:bg-red-700"
+            >
+              En
+            </button>
+
+            <button
+              onClick={handleArabic}
+              className="px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700"
+            >
+              Ar
+            </button>
+          </div> */}
         </div>
       </div>
     </header>

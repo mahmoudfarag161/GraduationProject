@@ -7,6 +7,7 @@ import { MdDelete } from "react-icons/md";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
 import Context from "../context";
+import NewDescription from "./NewDescription";
 
 const UploadProduct = ({ onClose, setFetchAgain }) => {
   const [data, setData] = useState({
@@ -29,7 +30,9 @@ const UploadProduct = ({ onClose, setFetchAgain }) => {
 
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");
+  const [descriptionClicked, setDescriptionClicked] = useState(false);
   const { token } = useContext(Context);
+  const [newDescription, setNewDescription] = useState("");
 
   const formData = objectToFormData(data);
 
@@ -142,6 +145,19 @@ const UploadProduct = ({ onClose, setFetchAgain }) => {
     fetchCategoryProduct();
     fetchSubCategoryProduct();
   }, []);
+  useEffect(
+    function () {
+      if (newDescription) {
+        setData((preve) => {
+          return {
+            ...preve,
+            description: newDescription,
+          };
+        });
+      }
+    },
+    [newDescription]
+  );
 
   return (
     <div className="fixed w-full  h-full bg-slate-200 bg-opacity-35 top-0 left-0 right-0 bottom-0 flex justify-center items-center">
@@ -318,23 +334,38 @@ const UploadProduct = ({ onClose, setFetchAgain }) => {
             className="p-2 bg-slate-100 border rounded"
             required
           />
-
-          <label htmlFor="description" className="mt-3">
-            Description :
-          </label>
-          <textarea
-            className="h-28 bg-slate-100 border resize-none p-1"
-            placeholder="enter product description"
-            rows={3}
-            onChange={handleOnChange}
-            name="description"
-            value={data.description}
-          ></textarea>
+          <div className=" flex justify-between items-center">
+            <div>
+              <label htmlFor="description" className="mt-3 block">
+                Description :
+              </label>
+              <textarea
+                className="h-28 bg-slate-100 border resize-none p-1"
+                placeholder="enter product description"
+                rows={3}
+                onChange={handleOnChange}
+                name="description"
+                value={data.description}
+              ></textarea>
+            </div>
+            <button
+              onClick={() => setDescriptionClicked(true)}
+              className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all  block "
+            >
+              smart description
+            </button>
+          </div>
 
           <button className="px-3 py-2 bg-red-600 text-white mb-10 hover:bg-red-700">
             Upload Product
           </button>
         </form>
+        {descriptionClicked && (
+          <NewDescription
+            setDescription={setNewDescription}
+            onClose={() => setDescriptionClicked(false)}
+          />
+        )}
       </div>
 
       {/***display image full screen */}

@@ -12,7 +12,6 @@ const VerticalCardProduct = ({ subCategoryId, heading }) => {
   const [loading, setLoading] = useState(true);
   const loadingList = new Array(13).fill(null);
   const stars = new Array(5).fill(null);
-  const [rating, setRating] = useState(0);
 
   const scrollElement = useRef();
 
@@ -32,7 +31,6 @@ const VerticalCardProduct = ({ subCategoryId, heading }) => {
     setLoading(false);
 
     setData(categoryProduct?.data);
-    setRating(categoryProduct.ratingsQuantity);
   };
 
   useEffect(() => {
@@ -128,7 +126,7 @@ const VerticalCardProduct = ({ subCategoryId, heading }) => {
                           <Star
                             key={index}
                             starNum={index + 1}
-                            rating={rating / 2}
+                            rating={product?.ratingsAverage}
                           />
                         );
                       })}

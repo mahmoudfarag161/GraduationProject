@@ -41,7 +41,6 @@ const ProductDetails = () => {
     const dataReponse = await response.json();
 
     setData(dataReponse?.data);
-    console.log(data);
     setActiveImage(dataReponse?.data?.images[0]);
   };
 

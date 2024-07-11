@@ -9,7 +9,37 @@ import SummaryApi from "./common";
 import Context from "./context";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "./store/userSlice";
+// import i18n from "i18next";
+// import { initReactI18next } from "react-i18next";
+// import LanguageDetector from "i18next-browser-languagedetector";
+// import HttpApi from "i18next-http-backend";
+// i18n
+//   .use(initReactI18next)
+//   .use(LanguageDetector)
+//   .use(HttpApi)
+//   .init({
+//     fallbackLng: "en",
 
+//     detection: {
+//       // order and from where user language should be detected
+//       order: [
+//         "cookie",
+//         "htmlTag",
+//         "querystring",
+
+//         "localStorage",
+//         "sessionStorage",
+//         "navigator",
+//         "path",
+//         "subdomain",
+//       ],
+
+//       caches: ["cookie"],
+//     },
+//     backend: {
+//       loadPath: "../locale/{{lng}}/translation.json",
+//     },
+//   });
 function App() {
   const dispatch = useDispatch();
   const [cartProductCount, setCartProductCount] = useState(0);
@@ -26,7 +56,6 @@ function App() {
     });
 
     const dataApi = await dataResponse.json();
-    console.log(dataApi);
 
     if (dataApi.data) {
       dispatch(setUserDetails(dataApi.data));
@@ -69,10 +98,11 @@ function App() {
         <ToastContainer position="top-center" />
 
         <Header />
+
         <main className="min-h-[calc(100vh-120px)] pt-16">
           <Outlet />
         </main>
-        <Footer />
+        {/* <Footer /> */}
       </Context.Provider>
     </>
   );

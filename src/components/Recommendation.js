@@ -1,14 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-
-import { FaAngleRight } from "react-icons/fa6";
-import { FaAngleLeft } from "react-icons/fa6";
+import { useContext, useEffect, useRef, useState } from "react";
+import Context from "../context";
+import addToCart from "../helpers/addToCart";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import displayINRCurrency from "../helpers/displayCurrency";
 import Star from "./Star";
-import addToCart from "../helpers/addToCart";
-import Context from "../context";
 
-const BannerProduct = () => {
+function Recommendation({ id }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const loadingList = new Array(13).fill(null);
@@ -27,23 +25,29 @@ const BannerProduct = () => {
     fetchUserAddToCart();
   };
 
-  useEffect(function () {
-    async function getBestSeller() {
-      setLoading(true);
-      const response = await fetch(
-        "https://ronolos-recommender-system.hf.space/api/best_seller"
-      );
-      const dataReponse = await response.json();
-      setData(dataReponse);
-      setLoading(false);
-    }
-    getBestSeller();
-  }, []);
+  useEffect(
+    function () {
+      async function getRecomendation() {
+        setLoading(true);
+        const response = await fetch(
+          `https://ronolos-recommender-system.hf.space/api/personal?user_id=${id}`
+        );
+        const dataReponse = await response.json();
+        console.log(id);
+        console.log(dataReponse);
+        if (!Array.isArray(dataReponse)) setData([]);
+        else setData(dataReponse);
+        setLoading(false);
+      }
+      getRecomendation();
+    },
+    [id]
+  );
 
   return (
     <div className="container mx-auto px-4 my-6 relative">
       {data?.length !== 0 && (
-        <h2 className="text-2xl font-semibold py-4">best_seller</h2>
+        <h2 className="text-2xl font-semibold py-4">Recommended</h2>
       )}
 
       <div
@@ -76,7 +80,7 @@ const BannerProduct = () => {
                 >
                   <div className="bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center animate-pulse"></div>
                   <div className="p-4 grid gap-3">
-                    <h2 className="font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black p-1 py-2 animate-pulse rounded-full bg-slate-200"></h2>
+                    <p className="font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black p-1 py-2 animate-pulse rounded-full bg-slate-200"></p>
                     <p className="capitalize text-slate-500 p-1 animate-pulse rounded-full bg-slate-200  py-2"></p>
                     <div className="flex gap-3">
                       <p className="text-red-600 font-medium p-1 animate-pulse rounded-full bg-slate-200 w-full  py-2"></p>
@@ -87,7 +91,7 @@ const BannerProduct = () => {
                 </div>
               );
             })
-          : data.map((product, index) => {
+          : data?.map((product, index) => {
               return (
                 <Link
                   key={index}
@@ -140,6 +144,6 @@ const BannerProduct = () => {
       </div>
     </div>
   );
-};
+}
 
-export default BannerProduct;
+export default Recommendation;
