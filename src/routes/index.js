@@ -5,6 +5,9 @@ import Login from "../pages/Login";
 import ForgotPassowrd from "../pages/ForgotPassowrd";
 import SignUp from "../pages/SignUp";
 import AdminPanel from "../pages/AdminPanel";
+import SellerPanel from "../pages/SellerPanel";
+import SellerAllProducts from "../pages/SellerAllProduct";
+import SellerAllOrders from "../pages/SellerAllOrdes";
 import AllUsers from "../pages/AllUsers";
 import AllProducts from "../pages/AllProducts";
 import CategoryProduct from "../pages/CategoryProduct";
@@ -108,6 +111,23 @@ const router = createBrowserRouter([
             path: "all-orders",
             element: <AllOrders />,
           },
+        ],
+      },
+            {
+        path: "seller-panel",
+        element: <SellerPanel />,
+        children: [
+          {
+            path: "seller-all-Products",
+            element: <SellerAllProducts />,
+          },
+          {
+            path: "all-seller-orders",
+            element: <SellerAllOrders />,
+          },
+
+
+          
         ],
       },
       
