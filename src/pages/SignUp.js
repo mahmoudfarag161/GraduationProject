@@ -45,6 +45,7 @@ const SignUp = () => {
       });
 
       const dataApi = await dataResponse.json();
+      console.log(dataApi);
       setLoading(false);
       if (dataApi.token) {
         toast.success("SignUp Successful");
@@ -52,9 +53,10 @@ const SignUp = () => {
       }
 
       if (dataApi.errors) {
-        toast.error(dataApi.msg);
+        toast.error(dataApi.errors[0].msg);
       }
     } else {
+      setLoading(false);
       toast.error("Please check password and confirm password");
     }
   };

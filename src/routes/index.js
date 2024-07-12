@@ -22,6 +22,7 @@ import ChangePassword from "../pages/ChangePassword"
 import ChangeAccountDetails from "../pages/ChangeAccountDetails";
 
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -109,6 +110,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+      
     ],
   },
 ]);

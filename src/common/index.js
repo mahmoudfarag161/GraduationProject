@@ -130,6 +130,7 @@ const SummaryApi = {
     url: "https://reca.azurewebsites.net/api/v1/users/updateMe",
     method: "PUT",
   },
+  
 };
 
 export default SummaryApi;

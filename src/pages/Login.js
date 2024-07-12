@@ -15,6 +15,7 @@ const Login = () => {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
   const { fetchUserDetails, fetchUserAddToCart, setToken } =
@@ -42,10 +43,14 @@ const Login = () => {
       },
       body: JSON.stringify(data),
     });
+    console.log(dataResponse);
 
     const dataApi = await dataResponse.json();
+    console.log(dataApi);
     setIsLoading(false);
-
+    if (dataApi.status === "fail") {
+      setError(dataApi.message);
+    }
     if (dataApi.token) {
       localStorage.setItem("token", dataApi.token);
 
@@ -97,6 +102,9 @@ const Login = () => {
                 >
                   <span>{showPassword ? <FaEyeSlash /> : <FaEye />}</span>
                 </div>
+              </div>
+              <div>
+                <p className=" text-red-600">{error}</p>
               </div>
               <Link
                 to={"/forgot-password"}

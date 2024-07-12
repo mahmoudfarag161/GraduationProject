@@ -33,7 +33,6 @@ function Recommendation({ id }) {
           `https://ronolos-recommender-system.hf.space/api/personal?user_id=${id}`
         );
         const dataReponse = await response.json();
-        console.log(id);
         console.log(dataReponse);
         if (!Array.isArray(dataReponse)) setData([]);
         else setData(dataReponse);
@@ -95,7 +94,7 @@ function Recommendation({ id }) {
               return (
                 <Link
                   key={index}
-                  to={"product/" + product?._id}
+                  to={"product/" + product?.product_id}
                   className="w-full min-w-[280px]  md:min-w-[320px] max-w-[280px] md:max-w-[320px]  bg-white rounded-sm shadow "
                 >
                   <div className="bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center">

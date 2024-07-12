@@ -43,7 +43,7 @@ const Profile = () => {
                   <h4 className='text-lg font-semibold mt-3'>Joined On</h4>
                   <p>{String(user?.createdAt).substring(0, 10) }</p>
                   
-                  {user?.role !== ROLE.ADMIN && (
+                  {user?.role === ROLE.GENERAL && (
                     <Link to={"/profile/orders"} className="block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full mt-5">
                       My Orders
                     </Link>
