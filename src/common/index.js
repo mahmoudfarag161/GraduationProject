@@ -38,7 +38,10 @@ const SummaryApi = {
   },
   productDetails: {
     url: "https://reca.azurewebsites.net/api/v1/products",
-    method: "get",
+    method: "GET",
+  },
+  reviews: {
+    url: "https://reca.azurewebsites.net/api/v1/reviews",
   },
   categoryProduct: {
     url: "https://reca.azurewebsites.net/api/v1/categories",
