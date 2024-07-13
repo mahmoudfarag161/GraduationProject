@@ -1,30 +1,38 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SummaryApi from "../common";
-import { FaStar } from "react-icons/fa";
-import { FaStarHalf } from "react-icons/fa";
+import { FaStar, FaStarHalf, FaStar as FaStarFilled } from "react-icons/fa";
 import displayINRCurrency from "../helpers/displayCurrency";
 import addToCart from "../helpers/addToCart";
 import Context from "../context";
 
 const ProductDetails = () => {
-  const [data, setData] = useState({});
-  const { token } = useContext(Context);
+  const [data, setData] = useState({
+    title: "",
+    slug: "",
+    category: { name: "" },
+    images: [],
+    description: "",
+    price: "",
+    priceAfterDiscount: "",
+  });
+  const { token, userId, fetchUserAddToCart, userRole } = useContext(Context);
   const params = useParams();
   const [loading, setLoading] = useState(true);
   const imagesListLoading = new Array(4).fill(null);
   const [activeImage, setActiveImage] = useState("");
+  const [rating, setRating] = useState(0);
+  const [reviews, setReviews] = useState([]);
+  const [newReview, setNewReview] = useState('');
+  const [userReview, setUserReview] = useState(null);
+
   const [zoomImageCoordinate, setZoomImageCoordinate] = useState({
     x: 0,
     y: 0,
   });
   const [zoomImage, setZoomImage] = useState(false);
-  const { fetchUserAddToCart } = useContext(Context);
 
-  const [rating, setRating] = useState(0);
-  const [reviews, setReviews] = useState([]); // State to store reviews
-  const [newReview, setNewReview] = useState(""); // State for the new review input
-  const [newUsername, setNewUsername] = useState("");
+  const navigate = useNavigate();
 
   const fetchProductDetails = async () => {
     setLoading(true);
@@ -44,8 +52,26 @@ const ProductDetails = () => {
     setActiveImage(dataReponse?.data?.images[0]);
   };
 
+  const fetchReviews = async () => {
+    const response = await fetch(
+      `${SummaryApi.reviews.url}?product=${params?.id}`,
+      {
+        method: 'GET',
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+    const dataResponse = await response.json();
+    setReviews(dataResponse.data);
+
+    const userReview = dataResponse.data.find(review => review.user._id === userId);
+    setUserReview(userReview);
+  };
+
   useEffect(() => {
     fetchProductDetails();
+    fetchReviews();
   }, [params]);
 
   const handleMouseEnterProduct = (imageURL) => {
@@ -77,21 +103,52 @@ const ProductDetails = () => {
     fetchUserAddToCart();
   };
 
-  const handleReviewSubmit = () => {
-    if (newUsername.trim() && newReview.trim()) {
-      const review = {
-        id: reviews.length + 1,
-        username: newUsername,
-        text: newReview,
-        rating: rating,
-      };
-      setReviews([...reviews, review]);
-      setNewReview("");
-      setNewUsername("");
+  const handleBuyProduct = async (e, id) => {
+    await addToCart(e, id, token);
+    fetchUserAddToCart();
+    navigate("/cart");
+  };
+
+  const handleReviewSubmit = async (title, ratings) => {
+    const response = await fetch(`${SummaryApi.reviews.url}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        title,
+        ratings,
+        product: params?.id,
+        user: userId,
+      }),
+    });
+
+    if (response.ok) {
+      const newReviewData = await response.json();
+      setReviews((prevReviews) => [...prevReviews, newReviewData.data]);
+      setNewReview('');
       setRating(0);
+      setUserReview(newReviewData.data);
     } else {
-      // Handle the case where username or review is not provided
-      alert("Please enter both a username and a review.");
+      console.error('Failed to submit review');
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    const response = await fetch(`${SummaryApi.reviews.url}/${reviewId}`, {
+      method: 'DELETE',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      setReviews((prevReviews) => prevReviews.filter((review) => review._id !== reviewId));
+      setUserReview(null);
+    } else {
+      console.error('Failed to delete review');
     }
   };
 
@@ -129,33 +186,29 @@ const ProductDetails = () => {
           <div className="h-full">
             {loading ? (
               <div className="flex gap-2 lg:flex-col overflow-scroll scrollbar-none h-full">
-                {imagesListLoading.map((el, index) => {
-                  return (
-                    <div
-                      className="h-20 w-20 bg-slate-200 rounded animate-pulse"
-                      key={"loadingImage" + index}
-                    ></div>
-                  );
-                })}
+                {imagesListLoading.map((el, index) => (
+                  <div
+                    className="h-20 w-20 bg-slate-200 rounded animate-pulse"
+                    key={"loadingImage" + index}
+                  ></div>
+                ))}
               </div>
             ) : (
               <div className="flex gap-2 lg:flex-col overflow-scroll scrollbar-none h-full">
-                {data?.images?.map((imgURL, index) => {
-                  return (
-                    <div
-                      className="h-20 w-20 bg-slate-200 rounded p-1"
-                      key={imgURL}
-                    >
-                      <img
-                        src={imgURL}
-                        alt={index}
-                        className="w-full h-full object-scale-down mix-blend-multiply cursor-pointer"
-                        onMouseEnter={() => handleMouseEnterProduct(imgURL)}
-                        onClick={() => handleMouseEnterProduct(imgURL)}
-                      />
-                    </div>
-                  );
-                })}
+                {data?.images?.map((imgURL, index) => (
+                  <div
+                    className="h-20 w-20 bg-slate-200 rounded p-1"
+                    key={imgURL}
+                  >
+                    <img
+                      src={imgURL}
+                      alt={index}
+                      className="w-full h-full object-scale-down mix-blend-multiply cursor-pointer"
+                      onMouseEnter={() => handleMouseEnterProduct(imgURL)}
+                      onClick={() => handleMouseEnterProduct(imgURL)}
+                    />
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -165,7 +218,7 @@ const ProductDetails = () => {
         {loading ? (
           <div className="grid gap-1 w-full">
             <p className="bg-slate-200 animate-pulse  h-6 lg:h-8 w-full rounded-full inline-block"></p>
-            <p className="text-2xl lg:text-4xl font-medium h-6 lg:h-8  bg-slate-200 animate-pulse w-full"></p>
+            <h2 className="text-2xl lg:text-4xl font-medium h-6 lg:h-8  bg-slate-200 animate-pulse w-full"></h2>
             <p className="capitalize text-slate-400 bg-slate-200 min-w-[100px] animate-pulse h-6 lg:h-8  w-full"></p>
 
             <div className="text-red-600 bg-slate-200 h-6 lg:h-8  animate-pulse flex items-center gap-1 w-full"></div>
@@ -186,19 +239,20 @@ const ProductDetails = () => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-1">
-            <p className="bg-red-200 text-red-600 px-2 rounded-full inline-block w-fit">
-              {data?.slug}
-            </p>
+          <div className="grid gap-1 w-full">
+            <p className="capitalize text-red-600">{data?.slug}</p>
             <h2 className="text-2xl lg:text-4xl font-medium">{data?.title}</h2>
-            <p className="capitalize text-slate-400">{data?.category?.name}</p>
+            <p className="capitalize text-slate-400">
+              Category : {data?.category?.name}
+            </p>
 
             <div className="text-red-600 flex items-center gap-1">
-              <FaStar />
-              <FaStar />
-              <FaStar />
-              <FaStar />
-              <FaStarHalf />
+              <FaStar className="text-yellow-500" />
+              <FaStar className="text-yellow-500" />
+              <FaStar className="text-yellow-500" />
+              <FaStar className="text-yellow-500" />
+              <FaStarHalf className="text-yellow-500" />
+              <span className="text-slate-500">(4.5)</span>
             </div>
 
             <div className="flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1">
@@ -211,6 +265,12 @@ const ProductDetails = () => {
             </div>
 
             <div className="flex items-center gap-3 my-2">
+              <button
+                className="border-2 border-red-600 rounded px-3 py-1 min-w-[120px] text-red-600 font-medium hover:bg-red-600 hover:text-white"
+                onClick={(e) => handleBuyProduct(e, data?._id)}
+              >
+                Buy
+              </button>
               <button
                 className="border-2 border-red-600 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-red-600 hover:text-red-600 hover:bg-white"
                 onClick={(e) => handleAddToCart(e, data?._id)}
@@ -226,66 +286,59 @@ const ProductDetails = () => {
           </div>
         )}
       </div>
-      {/* Review Section */}
-
-      {!loading && (
-        <div className="mt-8">
-          <h3 className="text-lg font-semibold">Customer Reviews</h3>
-          <div className="mt-4">
-            <input
-              className="w-full p-2 border border-gray-300 rounded mb-2"
-              placeholder="Your username"
-              value={newUsername}
-              onChange={(e) => setNewUsername(e.target.value)}
-            />
-            <textarea
-              className="w-full p-2 border border-gray-300 rounded"
-              placeholder="Write your review..."
-              value={newReview}
-              onChange={(e) => setNewReview(e.target.value)}
-            />
-            <div className="flex my-2">
-              {[...Array(5)].map((_, index) => (
-                <FaStar
-                  key={index}
-                  className={`cursor-pointer ${
-                    index < rating ? "text-yellow-500" : "text-gray-300"
-                  }`}
-                  onClick={() => setRating(index + 1)}
-                />
-              ))}
-            </div>
-            <button
-              className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-              onClick={handleReviewSubmit}
-            >
-              Submit Review
-            </button>
-          </div>
-          <div className="mt-4">
-            {reviews.map((review) => (
-              <div
-                key={review.id}
-                className="p-4 border border-gray-300 rounded my-2"
-              >
-                <div className="flex">
-                  {[...Array(review.rating)].map((_, index) => (
-                    <FaStar key={index} className="text-yellow-500" />
-                  ))}
-                </div>
-                <p className="mt-2">{review.text}</p>
-              </div>
+      <div className="mt-8">
+        <h3 className="text-lg font-semibold">Customer Reviews</h3>
+        <div className="mt-4">
+          <textarea
+            className="w-full p-2 border border-gray-300 rounded"
+            placeholder="Write your review..."
+            value={newReview}
+            onChange={(e) => setNewReview(e.target.value)}
+          />
+          <div className="flex my-2">
+            {[...Array(5)].map((_, index) => (
+              <FaStar
+                key={index}
+                className={`cursor-pointer ${
+                  index < rating ? "text-yellow-500" : "text-gray-300"
+                }`}
+                onClick={() => setRating(index + 1)}
+              />
             ))}
           </div>
+          <button
+            className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+            onClick={() => handleReviewSubmit(newReview, rating)}
+          >
+            Submit Review
+          </button>
         </div>
-      )}
-
-      {/* {data.category && (
-        <CategroyWiseProductDisplay
-          category={data?.category?.name}
-          heading={"Recommended Product"}
-        />
-      )} */}
+        <div className="mt-4">
+          {reviews.map((review) => (
+            <div
+              key={review._id}
+              className="p-4 border border-gray-300 rounded my-2"
+            >
+              <div className="flex">
+                {[...Array(review.ratings)].map((_, index) => (
+                  <FaStarFilled key={index} className="text-yellow-500" />
+                ))}
+              </div>
+              <p className="mt-2">{review.title}</p>
+              <p className="text-sm text-gray-500">By: {review.user.name}</p>
+              {userId === review.user._id && (
+                <button
+                  className="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-600 mt-2"
+                  onClick={() => handleDeleteReview(review._id)}
+                >
+                  Delete
+                </button>
+              )}
+            </div>
+          ))}
+          
+        </div>
+      </div>
     </div>
   );
 };
