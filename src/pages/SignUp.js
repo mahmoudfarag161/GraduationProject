@@ -15,8 +15,10 @@ const SignUp = () => {
     password: "",
     name: "",
     passwordConfirm: "",
+    role: "user",
   });
   const [loading, setLoading] = useState(false);
+  const [userRole, setUserRole] = useState("user");
 
   const navigate = useNavigate();
 
@@ -30,6 +32,12 @@ const SignUp = () => {
       };
     });
   };
+  function handleOnChangeSelect(e) {
+    setUserRole(e.target.value);
+    setData((data) => {
+      return { ...data, role: e.target.value };
+    });
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -142,6 +150,23 @@ const SignUp = () => {
                   <span>
                     {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                   </span>
+                </div>
+              </div>
+              <div className="grid">
+                <label>Role : </label>
+                <div className="bg-slate-100 p-2">
+                  <select
+                    className="border px-4 py-1"
+                    value={userRole}
+                    onChange={handleOnChangeSelect}
+                  >
+                    <option value="user" key="user">
+                      user
+                    </option>
+                    <option value="seller" key="seller">
+                      seller
+                    </option>
+                  </select>
                 </div>
               </div>
             </div>
