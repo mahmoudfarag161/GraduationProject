@@ -136,6 +136,12 @@ function Recommendation({ id }) {
                     >
                       Add to Cart
                     </button>
+                    <button
+                      className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-0.5 rounded-full"
+                      onClick={(e) => handleAddToCart(e, product?._id)}
+                    >
+                      Add to Wishlist
+                    </button>
                   </div>
                 </Link>
               );

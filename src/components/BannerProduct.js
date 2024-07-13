@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import displayINRCurrency from "../helpers/displayCurrency";
 import Star from "./Star";
 import addToCart from "../helpers/addToCart";
+import addToWishlist from "../helpers/addToWishlist";
 import Context from "../context";
 
 const BannerProduct = () => {
@@ -26,6 +27,9 @@ const BannerProduct = () => {
     await addToCart(e, id, token);
     fetchUserAddToCart();
   };
+  const handleAddToWishlist = async (e, id) => {
+    await addToWishlist(e, id, token);
+  };
 
   useEffect(function () {
     async function getBestSeller() {
@@ -34,7 +38,6 @@ const BannerProduct = () => {
         "https://ronolos-recommender-system.hf.space/api/best_seller"
       );
       const dataReponse = await response.json();
-      console.log(dataReponse);
       setData(dataReponse);
       setLoading(false);
     }
@@ -130,9 +133,15 @@ const BannerProduct = () => {
                     </div>
                     <button
                       className="text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full"
-                      onClick={(e) => handleAddToCart(e, product?._id)}
+                      onClick={(e) => handleAddToCart(e, product?.product_id)}
                     >
                       Add to Cart
+                    </button>
+                    <button
+                      className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-0.5 rounded-full"
+                      onClick={(e) => handleAddToWishlist(e, product?._id)}
+                    >
+                      Add to Wishlist
                     </button>
                   </div>
                 </Link>

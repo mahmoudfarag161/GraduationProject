@@ -23,6 +23,7 @@ import Profile from "../pages/Profile";
 import UserOrders from "../pages/UserOrders";
 import ChangePassword from "../pages/ChangePassword"
 import ChangeAccountDetails from "../pages/ChangeAccountDetails";
+import Wishlist from "../pages/Wishlist";
 
 
 
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: "cart",
         element: <Cart />,
+      },
+      {
+        path: "wishlist",
+        element: <Wishlist />,
       },
       {
         path: "payment",

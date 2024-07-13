@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import { setUserDetails } from "../store/userSlice";
 import ROLE from "../common/role";
 import Context from "../context";
+import { GrFavorite } from "react-icons/gr";
+
 // import i18n from "i18next";
 
 // import cookies from "js-cookie";
@@ -131,6 +133,17 @@ const Header = () => {
             <Link to={"/cart"} className="text-2xl relative">
               <span>
                 <FaShoppingCart />
+              </span>
+
+              <div className="bg-red-600 text-white w-5 h-5 rounded-full p-1 flex items-center justify-center absolute -top-2 -right-3">
+                <p className="text-sm">{context?.cartProductCount}</p>
+              </div>
+            </Link>
+          )}
+          {user?._id && (
+            <Link to={"/wishlist"} className="text-2xl relative">
+              <span>
+                <GrFavorite />
               </span>
 
               <div className="bg-red-600 text-white w-5 h-5 rounded-full p-1 flex items-center justify-center absolute -top-2 -right-3">

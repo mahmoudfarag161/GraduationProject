@@ -97,6 +97,27 @@ const SummaryApi = {
     url: "https://reca.azurewebsites.net/api/v1/cart",
     method: "delete",
   },
+  addToWishlistProduct: {
+    url: "https://reca.azurewebsites.net/api/v1/wishlist/",
+    method: "post",
+  },
+
+  addToWishlistProductView: {
+    url: "https://reca.azurewebsites.net/api/v1/wishlist",
+    method: "get",
+  },
+  updateWishlistProduct: {
+    url: "https://reca.azurewebsites.net/api/v1/wishlist",
+    method: "put",
+  },
+  deleteWishlistProduct: {
+    url: "https://reca.azurewebsites.net/api/v1/wishlist",
+    method: "delete",
+  },
+  clearWishlistProduct: {
+    url: "https://reca.azurewebsites.net/api/v1/wishlist",
+    method: "delete",
+  },
 
   searchProduct: {
     url: "https://reca.azurewebsites.net/api/v1/products",
