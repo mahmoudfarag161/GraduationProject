@@ -119,7 +119,7 @@ const router = createBrowserRouter([
         ],
       },
             {
-        path: "seller-panel",
+        path: "seller-panal",
         element: <SellerPanel />,
         children: [
           {
