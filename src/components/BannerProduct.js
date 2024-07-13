@@ -15,7 +15,7 @@ const BannerProduct = () => {
   const loadingList = new Array(13).fill(null);
   const stars = new Array(5).fill(null);
   const scrollElement = useRef();
-  const { fetchUserAddToCart, token } = useContext(Context);
+  const { fetchUserAddToCart, token, setWishlistNum } = useContext(Context);
 
   const scrollRight = () => {
     scrollElement.current.scrollLeft += 300;
@@ -28,7 +28,7 @@ const BannerProduct = () => {
     fetchUserAddToCart();
   };
   const handleAddToWishlist = async (e, id) => {
-    await addToWishlist(e, id, token);
+    await addToWishlist(e, id, token, setWishlistNum);
   };
 
   useEffect(function () {
@@ -139,7 +139,9 @@ const BannerProduct = () => {
                     </button>
                     <button
                       className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-0.5 rounded-full"
-                      onClick={(e) => handleAddToWishlist(e, product?._id)}
+                      onClick={(e) =>
+                        handleAddToWishlist(e, product?.product_id)
+                      }
                     >
                       Add to Wishlist
                     </button>

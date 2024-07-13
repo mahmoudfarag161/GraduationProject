@@ -114,10 +114,11 @@ const AdminEditProduct = ({ onClose, productData, setFetchAgain }) => {
     );
 
     const responseData = await response.json();
-    console.log(responseData.data._id);
+    console.log(responseData);
 
     if (responseData.data) {
       toast.success("produce has been updated");
+      setFetchAgain(true);
       onClose();
     }
 

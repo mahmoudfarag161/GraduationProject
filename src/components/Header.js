@@ -106,7 +106,7 @@ const Header = () => {
                       Admin Panel
                     </Link>
                   )}
-                  
+
                   <Link
                     to={"/profile"}
                     className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
@@ -119,11 +119,10 @@ const Header = () => {
                       to={"/seller-panal"}
                       className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
                       onClick={() => setMenuDisplay((preve) => !preve)}
-                      >
-                        Seller Pannel
+                    >
+                      Seller Pannel
                     </Link>
                   )}
-                  
                 </nav>
               </div>
             )}
@@ -147,7 +146,7 @@ const Header = () => {
               </span>
 
               <div className="bg-red-600 text-white w-5 h-5 rounded-full p-1 flex items-center justify-center absolute -top-2 -right-3">
-                <p className="text-sm">{context?.cartProductCount}</p>
+                <p className="text-sm">{context?.WishlistNum}</p>
               </div>
             </Link>
           )}

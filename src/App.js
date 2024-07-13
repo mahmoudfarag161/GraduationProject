@@ -44,6 +44,7 @@ function App() {
   const dispatch = useDispatch();
   const [cartProductCount, setCartProductCount] = useState(0);
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [WishlistNum, setWishlistNum] = useState(0);
 
   const fetchUserDetails = async (token1 = token) => {
     if (!token1) return;
@@ -77,12 +78,27 @@ function App() {
 
     setCartProductCount(dataApi?.numOfCartItems);
   };
+  const fetchWishlistData = async () => {
+    if (!token) return;
+    const response = await fetch(SummaryApi.addToWishlistProductView.url, {
+      method: SummaryApi.addToWishlistProductView.method,
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
+    const responseData = await response.json();
+    if (!responseData.data) {
+      setWishlistNum(0);
+    } else setWishlistNum(responseData.data.length);
+  };
   useEffect(() => {
     /**user Details */
     fetchUserDetails();
     /**user Details cart product */
     fetchUserAddToCart();
+    fetchWishlistData();
   }, [token]);
   return (
     <>
@@ -93,6 +109,9 @@ function App() {
           fetchUserAddToCart,
           token,
           setToken,
+          WishlistNum,
+          setWishlistNum,
+          fetchWishlistData,
         }}
       >
         <ToastContainer position="top-center" />

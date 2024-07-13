@@ -1,7 +1,7 @@
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
 
-const addToWishlist = async (e, id, token) => {
+const addToWishlist = async (e, id, token, setWishlistNum) => {
   e?.stopPropagation();
   e?.preventDefault();
 
@@ -11,15 +11,16 @@ const addToWishlist = async (e, id, token) => {
       "content-type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ productId: id}),
+    body: JSON.stringify({ productId: id }),
   });
-  console.log(response)
+  console.log(response);
 
   const responseData = await response.json();
-  console.log(responseData)
+  console.log(responseData);
 
   if (responseData.status === "success") {
     toast.success("product added to wishlist");
+    setWishlistNum(responseData.data.length);
   }
 
   if (responseData.error) {

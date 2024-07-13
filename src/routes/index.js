@@ -21,11 +21,9 @@ import AllSubCategories from "../pages/AllSubCategories";
 import AllOrders from "../pages/AllOrders";
 import Profile from "../pages/Profile";
 import UserOrders from "../pages/UserOrders";
-import ChangePassword from "../pages/ChangePassword"
+import ChangePassword from "../pages/ChangePassword";
 import ChangeAccountDetails from "../pages/ChangeAccountDetails";
 import Wishlist from "../pages/Wishlist";
-
-
 
 const router = createBrowserRouter([
   {
@@ -118,7 +116,7 @@ const router = createBrowserRouter([
           },
         ],
       },
-            {
+      {
         path: "seller-panal",
         element: <SellerPanel />,
         children: [
@@ -130,12 +128,8 @@ const router = createBrowserRouter([
             path: "all-seller-orders",
             element: <SellerAllOrders />,
           },
-
-
-          
         ],
       },
-      
     ],
   },
 ]);

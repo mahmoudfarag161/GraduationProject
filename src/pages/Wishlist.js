@@ -22,7 +22,7 @@ const Wishlist = () => {
         Authorization: `Bearer ${context.token}`,
       },
     });
-    
+
     const responseData = await response.json();
 
     setLoading(false);
@@ -42,19 +42,20 @@ const Wishlist = () => {
   // };
 
   useEffect(function () {
-    fetchData()
-  }
-  , []);
-
+    fetchData();
+  }, []);
 
   const deleteWishlistProduct = async (id) => {
-    const response = await fetch(`${SummaryApi.deleteWishlistProduct.url}/${id}`, {
-      method: SummaryApi.deleteWishlistProduct.method,
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${context.token}`,
-      },
-    });
+    const response = await fetch(
+      `${SummaryApi.deleteWishlistProduct.url}/${id}`,
+      {
+        method: SummaryApi.deleteWishlistProduct.method,
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${context.token}`,
+        },
+      }
+    );
 
     const responseData = await response.json();
 
@@ -64,17 +65,20 @@ const Wishlist = () => {
     }
   };
   async function handleClearWishlist() {
-    const response = await fetch(SummaryApi.clearWishlistProduct.url, {
-      method: "delete",
-      headers: {
-        Authorization: `Bearer ${context.token}`,
-      },
-    });
+    const response = await fetch(
+      "https://reca.azurewebsites.net/api/v1/wishlist/clear",
+      {
+        method: "put",
+        headers: {
+          Authorization: `Bearer ${context.token}`,
+        },
+      }
+    );
     console.log(response);
 
-    if (response.status === 204) {
+    if (response.status === 200) {
       fetchData();
-      context.fetchUserAddToCart();
+      context.fetchWishlistData();
     }
   }
 
@@ -136,7 +140,6 @@ const Wishlist = () => {
                           )}
                         </p>
                       </div>
-                      
                     </div>
                   </div>
                 );
@@ -149,7 +152,6 @@ const Wishlist = () => {
             <div className="h-36 bg-slate-200 border border-slate-300 animate-pulse"></div>
           ) : (
             <div className="h-36 bg-white">
-              
               <button
                 onClick={handleClearWishlist}
                 className=" bg-blue-600 p-2 text-white w-full mt-2"
