@@ -10,15 +10,10 @@ import { setUserDetails } from "../store/userSlice";
 import ROLE from "../common/role";
 import Context from "../context";
 import { GrFavorite } from "react-icons/gr";
-
-// import i18n from "i18next";
-
-// import cookies from "js-cookie";
-// import { useTranslation } from "react-i18next";
+import UploadPhoto from "./UploadPhoto";
+import { MdOutlineInsertPhoto } from "react-icons/md";
 
 const Header = () => {
-  // const lng = cookies.get("i18next") || "en";
-
   const user = useSelector((state) => state?.user?.user);
   const dispatch = useDispatch();
   const [menuDisplay, setMenuDisplay] = useState(false);
@@ -28,6 +23,7 @@ const Header = () => {
   const URLSearch = new URLSearchParams(searchInput?.search);
   const searchQuery = URLSearch.getAll("keyword");
   const [search, setSearch] = useState(searchQuery);
+  const [clicked, setClicked] = useState(false);
 
   function handleLogout() {
     localStorage.removeItem("token");
@@ -47,12 +43,10 @@ const Header = () => {
       navigate("/search");
     }
   };
-  // function handleEnglish() {
-  //   i18n.changeLanguage("en");
-  // }
-  // function handleArabic() {
-  //   i18n.changeLanguage("ar");
-  // }
+  function handlePhotoDetection() {
+    setClicked(true);
+  }
+
   return (
     <header className="h-16 shadow-md bg-white fixed w-full z-40">
       <div className=" h-full container mx-auto flex items-center px-4 justify-between">
@@ -62,7 +56,16 @@ const Header = () => {
           </Link>
         </div>
 
-        <div className="hidden lg:flex items-center w-full justify-between max-w-sm border rounded-full focus-within:shadow pl-2">
+        {clicked && <UploadPhoto onClose={() => setClicked(false)} />}
+
+        <div className="hidden lg:flex items-center w-full justify-between max-w-sm border rounded-full focus-within:shadow pr-1">
+          <div className="text-lg min-w-[50px] h-8 bg-red-600 flex items-center justify-center rounded-l-full text-white">
+            <MdOutlineInsertPhoto
+              onClick={handlePhotoDetection}
+              cursor="pointer"
+            />
+          </div>
+
           <input
             type="text"
             placeholder="search product here..."
@@ -168,21 +171,6 @@ const Header = () => {
               </Link>
             )}
           </div>
-          {/* <div>
-            <button
-              onClick={handleEnglish}
-              className="px-3 mx-2 py-1 rounded-full text-white bg-red-600 hover:bg-red-700"
-            >
-              En
-            </button>
-
-            <button
-              onClick={handleArabic}
-              className="px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700"
-            >
-              Ar
-            </button>
-          </div> */}
         </div>
       </div>
     </header>

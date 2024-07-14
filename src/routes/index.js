@@ -24,6 +24,7 @@ import UserOrders from "../pages/UserOrders";
 import ChangePassword from "../pages/ChangePassword";
 import ChangeAccountDetails from "../pages/ChangeAccountDetails";
 import Wishlist from "../pages/Wishlist";
+import PhotoSearch from "../pages/PhotoSearch";
 
 const router = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
       {
         path: "wishlist",
         element: <Wishlist />,
+      },
+      {
+        path: "photo-search",
+        element: <PhotoSearch />,
       },
       {
         path: "payment",

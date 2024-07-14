@@ -45,6 +45,7 @@ function App() {
   const [cartProductCount, setCartProductCount] = useState(0);
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [WishlistNum, setWishlistNum] = useState(0);
+  const [photoData, setPhotoData] = useState([]);
 
   const fetchUserDetails = async (token1 = token) => {
     if (!token1) return;
@@ -112,6 +113,8 @@ function App() {
           WishlistNum,
           setWishlistNum,
           fetchWishlistData,
+          photoData,
+          setPhotoData,
         }}
       >
         <ToastContainer position="top-center" />
