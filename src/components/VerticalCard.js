@@ -4,14 +4,18 @@ import displayINRCurrency from "../helpers/displayCurrency";
 import Context from "../context";
 import addToCart from "../helpers/addToCart";
 import { Link } from "react-router-dom";
+import addToWishlist from "../helpers/addToWishlist";
 
 const VerticalCard = ({ loading, data = [] }) => {
   const loadingList = new Array(13).fill(null);
-  const { fetchUserAddToCart, token } = useContext(Context);
+  const { fetchUserAddToCart, token, setWishlistNum } = useContext(Context);
 
   const handleAddToCart = async (e, id) => {
     await addToCart(e, id, token);
     fetchUserAddToCart();
+  };
+  const handleAddToWishlist = async (e, id) => {
+    await addToWishlist(e, id, token, setWishlistNum);
   };
 
   return (
@@ -67,6 +71,12 @@ const VerticalCard = ({ loading, data = [] }) => {
                     onClick={(e) => handleAddToCart(e, product?._id)}
                   >
                     Add to Cart
+                  </button>
+                  <button
+                    className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-0.5 rounded-full"
+                    onClick={(e) => handleAddToWishlist(e, product?._id)}
+                  >
+                    Add to Wishlist
                   </button>
                 </div>
               </Link>
