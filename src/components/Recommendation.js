@@ -5,6 +5,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import displayINRCurrency from "../helpers/displayCurrency";
 import Star from "./Star";
+import addToWishlist from "../helpers/addToWishlist";
 
 function Recommendation({ id }) {
   const [data, setData] = useState([]);
@@ -12,7 +13,7 @@ function Recommendation({ id }) {
   const loadingList = new Array(13).fill(null);
   const stars = new Array(5).fill(null);
   const scrollElement = useRef();
-  const { fetchUserAddToCart, token } = useContext(Context);
+  const { fetchUserAddToCart, token, setWishlistNum } = useContext(Context);
 
   const scrollRight = () => {
     scrollElement.current.scrollLeft += 300;
@@ -24,7 +25,9 @@ function Recommendation({ id }) {
     await addToCart(e, id, token);
     fetchUserAddToCart();
   };
-
+  const handleAddToWishlist = async (e, id) => {
+    await addToWishlist(e, id, token, setWishlistNum);
+  };
   useEffect(
     function () {
       async function getRecomendation() {
@@ -138,7 +141,7 @@ function Recommendation({ id }) {
                     </button>
                     <button
                       className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-0.5 rounded-full"
-                      onClick={(e) => handleAddToCart(e, product?._id)}
+                      onClick={(e) => handleAddToWishlist(e, product?._id)}
                     >
                       Add to Wishlist
                     </button>

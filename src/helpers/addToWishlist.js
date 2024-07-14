@@ -14,10 +14,7 @@ const addToWishlist = async (e, id, token, setWishlistNum) => {
     body: JSON.stringify({ productId: id }),
   });
   console.log(response);
-
   const responseData = await response.json();
-  console.log(responseData);
-
   if (responseData.status === "success") {
     toast.success("product added to wishlist");
     setWishlistNum(responseData.data.length);
